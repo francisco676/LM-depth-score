@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The LinkedIn Depth Score Cheat Sheet — RallyUp</title>
+<meta name="description" content="How LinkedIn's new algorithm works — and the 6 formats it now rewards. A guide by Alec @ RallyUp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#09090b;--surface:#18181b;--surface2:#27272a;--border:#3f3f46;
+  --text:#fafafa;--text2:#a1a1aa;--text3:#71717a;
+  --accent:#a78bfa;--accent2:#c4b5fd;--accent-bg:rgba(167,139,250,.08);
+  --green:#4ade80;--red:#f87171;--yellow:#facc15;--blue:#60a5fa;
+  --orange:#fb923c;
+  --radius:12px;--radius-lg:20px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent2)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(167,139,250,.12),transparent 70%);pointer-events:none}
+.hero-inner{max-width:720px;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:99px;border:1px solid var(--border);background:var(--surface);font-size:.8rem;color:var(--text2);margin-bottom:2rem;letter-spacing:.02em}
+.badge span{color:var(--green);font-weight:600}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1.25rem}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.15rem;color:var(--text2);max-width:540px;margin:0 auto 2.5rem}
+.hero-meta{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;color:var(--text3);font-size:.85rem;margin-bottom:3rem}
+.hero-meta div{display:flex;align-items:center;gap:.4rem}
+.scroll-hint{color:var(--text3);font-size:.8rem;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* LAYOUT */
+.container{max-width:760px;margin:0 auto;padding:0 1.5rem}
+section{padding:5rem 0}
+
+/* SECTION HEADERS */
+.section-label{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:1rem}
+.section-label::before{content:'';width:12px;height:2px;background:var(--accent);border-radius:2px}
+h2{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:1rem}
+h3{font-size:1.2rem;font-weight:700;margin-bottom:.5rem}
+
+/* SIGNAL TABLE */
+.signal-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.signal-grid{display:grid;gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-top:2rem}
+.signal-row{display:grid;grid-template-columns:1fr auto auto;gap:0;background:var(--surface)}
+.signal-row.header{background:var(--surface2)}
+.signal-row.header .cell{font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
+.cell{padding:.85rem 1.2rem;font-size:.9rem;display:flex;align-items:center}
+.cell:nth-child(2),.cell:nth-child(3){justify-content:center;min-width:100px;text-align:center}
+.weight-high{color:var(--green);font-weight:700}
+.weight-med{color:var(--yellow);font-weight:500}
+.weight-low{color:var(--text3)}
+.weight-neg{color:var(--red);font-weight:700}
+
+/* STAT CALLOUT */
+.stat-callout{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.5rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--accent-bg);margin:2rem 0}
+.stat-callout .num{font-size:2rem;font-weight:900;color:var(--accent);line-height:1}
+.stat-callout p{color:var(--text2);font-size:.9rem;line-height:1.5}
+.stat-callout strong{color:var(--text)}
+
+/* FORMAT CARDS */
+.format-cards{display:flex;flex-direction:column;gap:1.25rem;margin-top:2rem}
+.format-card{border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem 1.75rem;background:var(--surface);transition:border-color .2s}
+.format-card:hover{border-color:var(--accent)}
+.format-num{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);font-weight:500;margin-bottom:.5rem}
+.format-card h3{margin-bottom:.25rem}
+.format-best{font-size:.8rem;color:var(--text3);margin-bottom:.75rem}
+.format-best span{color:var(--green);font-weight:600}
+.format-card p{color:var(--text2);font-size:.9rem;margin-bottom:1rem}
+.format-structure{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text3);line-height:2}
+.format-structure .highlight{color:var(--text);font-weight:500}
+
+/* TEMPLATES */
+.template-block{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem;background:var(--surface)}
+.template-header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid var(--border);background:var(--surface2)}
+.template-header h3{margin:0;font-size:1rem}
+.template-tag{font-size:.7rem;font-weight:600;padding:.25rem .6rem;border-radius:99px;border:1px solid var(--border);color:var(--text3)}
+.template-body{padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text2);line-height:2;white-space:pre-wrap}
+.template-body .var{color:var(--accent);font-weight:500}
+.template-body .arrow{color:var(--green)}
+
+/* SCHEDULE */
+.schedule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem}
+.schedule-card{padding:1.25rem;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface)}
+.schedule-card .label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.5rem}
+.schedule-card .value{font-size:1rem;font-weight:600;color:var(--text)}
+.schedule-card .sub{font-size:.8rem;color:var(--text3);margin-top:.25rem}
+.rule-row{display:flex;align-items:flex-start;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.rule-row:last-child{border:none}
+.rule-icon{flex-shrink:0;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700}
+.rule-icon.do{background:rgba(74,222,128,.1);color:var(--green)}
+.rule-icon.dont{background:rgba(248,113,113,.1);color:var(--red)}
+.rule-text{font-size:.9rem;color:var(--text2)}
+.rule-text strong{color:var(--text)}
+
+/* CTA */
+.cta-section{text-align:center;padding:5rem 1.5rem;position:relative}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 100%,rgba(167,139,250,.1),transparent 70%);pointer-events:none}
+.cta-box{max-width:600px;margin:0 auto;position:relative;z-index:1}
+.cta-box h2{font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:1rem}
+.cta-box p{color:var(--text2);font-size:1.05rem;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 2rem;border-radius:var(--radius);font-size:1rem;font-weight:700;border:none;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:var(--bg)}
+.btn-primary:hover{background:var(--accent2);color:var(--bg);transform:translateY(-1px);box-shadow:0 8px 30px rgba(167,139,250,.25)}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border);font-size:.85rem;padding:.6rem 1.2rem;margin-top:1rem}
+.btn-ghost:hover{border-color:var(--text3);color:var(--text)}
+
+/* FLOATING CTA */
+.floating-cta{position:fixed;bottom:1.5rem;right:1.5rem;z-index:100;opacity:0;transform:translateY(20px);transition:all .3s;pointer-events:none}
+.floating-cta.visible{opacity:1;transform:translateY(0);pointer-events:all}
+.floating-cta .btn{box-shadow:0 4px 20px rgba(0,0,0,.5);font-size:.9rem;padding:.75rem 1.5rem}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:0}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem 1.5rem;color:var(--text3);font-size:.8rem}
+footer a{color:var(--text2)}
+
+/* BLURRED TEASER */
+.teaser-overlay{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);margin-top:2rem}
+.teaser-content{padding:1.5rem;filter:blur(5px);user-select:none;pointer-events:none;font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text3);line-height:2;white-space:pre-wrap}
+.teaser-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(9,9,11,.6);backdrop-filter:blur(2px);gap:.75rem;z-index:2}
+.teaser-lock p{color:var(--text2);font-size:.9rem;text-align:center;max-width:320px}
+.teaser-lock .btn{font-size:.85rem;padding:.65rem 1.4rem}
+
+/* INLINE CTA BANNER */
+.inline-cta{border:1px solid rgba(167,139,250,.25);border-radius:var(--radius);padding:2rem;background:linear-gradient(135deg,rgba(167,139,250,.06),rgba(167,139,250,.02));text-align:center;margin:3rem 0}
+.inline-cta p{color:var(--text2);font-size:.95rem;margin-bottom:1rem;max-width:480px;margin-left:auto;margin-right:auto}
+.inline-cta p strong{color:var(--text)}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .signal-row{grid-template-columns:1fr 80px 80px}
+  .cell{padding:.7rem .8rem;font-size:.8rem}
+  .cell:nth-child(2),.cell:nth-child(3){min-width:unset}
+  .hero-meta{gap:1rem}
+  .format-card{padding:1.25rem}
+  .schedule-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="badge">🔄 Updated for <span>2026 Algorithm</span></div>
+    <h1>The LinkedIn<br><em>Depth Score</em><br>Cheat Sheet</h1>
+    <p>LinkedIn quietly rewired its algorithm. Likes are nearly worthless now. Dwell time is everything. Here's exactly what changed — and the 6 formats that win.</p>
+    <div class="hero-meta">
+      <div>📄 5 min read</div>
+      <div>📐 6 formats</div>
+      <div>📋 3 copy-paste templates</div>
+    </div>
+    <div class="scroll-hint">↓ Scroll to start</div>
+  </div>
+</section>
+
+<!-- WHAT CHANGED -->
+<section class="signal-section">
+  <div class="container">
+    <div class="section-label">The Shift</div>
+    <h2>LinkedIn killed vanity metrics.</h2>
+    <p style="color:var(--text2);max-width:560px">In early 2026, LinkedIn introduced <strong style="color:var(--text)">Depth Score</strong> — a ranking signal based on how long someone actually reads your post, not whether they tapped a thumbs up. 60% of creators saw reach drop overnight. It wasn't their content. It was their format.</p>
+
+    <div class="stat-callout">
+      <div class="num">60%</div>
+      <p>of creators saw their <strong>reach drop</strong> after the Depth Score rollout — most never figured out why.</p>
+    </div>
+
+    <p style="color:var(--text2);margin-bottom:.5rem">Here's how every signal is now weighted:</p>
+
+    <div class="signal-grid">
+      <div class="signal-row header">
+        <div class="cell">Signal</div>
+        <div class="cell">Now</div>
+        <div class="cell">Before</div>
+      </div>
+      <div class="signal-row">
+        <div class="cell"><strong>Dwell time (reading time)</strong></div>
+        <div class="cell weight-high">HIGH</div>
+        <div class="cell weight-low">Low</div>
+      </div>
+      <div class="signal-row">
+        <div class="cell"><strong>Saves</strong></div>
+        <div class="cell weight-high">HIGH</div>
+        <div class="cell weight-med">Med</div>
+      </div>
+      <div class="signal-row">
+        <div class="cell"><strong>Shares / reposts</strong></div>
+        <div class="cell weight-high">HIGH</div>
+        <div class="cell weight-med">Med</div>
+      </div>
+      <div class="signal-row">
+        <div class="cell"><strong>Comment depth (back-and-forth)</strong></div>
+        <div class="cell weight-high">HIGH</div>
+        <div class="cell weight-low">Low</div>
+      </div>
+      <div class="signal-row">
+        <div class="cell"><strong>First-degree comments</strong></div>
+        <div class="cell weight-med">Med</div>
+        <div class="cell weight-high">High</div>
+      </div>
+      <div class="signal-row">
+        <div class="cell"><strong>Likes / reactions</strong></div>
+        <div class="cell weight-low">Low</div>
+        <div class="cell weight-high">High</div>
+      </div>
+      <div class="signal-row">
+        <div class="cell"><strong>External link clicks</strong></div>
+        <div class="cell weight-neg">−60%</div>
+        <div class="cell weight-low">Neutral</div>
+      </div>
+    </div>
+
+    <p style="color:var(--text3);font-size:.8rem;margin-top:1rem">The takeaway: posts that keep people reading — and spark real conversation — now get exponentially more distribution.</p>
+  </div>
+</section>
+
+<!-- 6 FORMATS -->
+<section>
+  <div class="container">
+    <div class="section-label">The Playbook</div>
+    <h2>6 post formats that win on Depth Score</h2>
+    <p style="color:var(--text2);margin-bottom:0">Each format is optimized for a specific Depth Score signal. Use them as blueprints — not scripts.</p>
+
+    <div class="format-cards">
+
+      <!-- FORMAT 1 -->
+      <div class="format-card">
+        <div class="format-num">01</div>
+        <h3>The Scroll-Stopper</h3>
+        <div class="format-best">Optimized for → <span>Dwell time</span></div>
+        <p>Open with a specific number or claim that demands context. Then deliver that context across 5–8 short paragraphs. Each paragraph creates a micro-scroll — dwell time compounds with every line.</p>
+        <div class="format-structure">
+<span class="highlight">[Specific number or claim — 1 line]</span>
+[2–3 lines of setup — why this matters]
+[Discovery or shift — what changed]
+[Result 1]
+[Result 2]
+[Result 3]
+<span class="highlight">[Reflection or open question]</span></div>
+      </div>
+
+      <!-- FORMAT 2 -->
+      <div class="format-card">
+        <div class="format-num">02</div>
+        <h3>The Story Arc</h3>
+        <div class="format-best">Optimized for → <span>Saves</span></div>
+        <p>A beginning-middle-end with real stakes. Personal experience works best. People save stories they want to re-read or forward to a colleague — saves are now a top-tier signal.</p>
+        <div class="format-structure">
+<span class="highlight">[Set the scene — where were you, what was broken]</span>
+[The turning point — what you tried]
+[The result — specific numbers or outcomes]
+<span class="highlight">[One sentence that generalizes the lesson]</span></div>
+      </div>
+
+      <!-- FORMAT 3 -->
+      <div class="format-card">
+        <div class="format-num">03</div>
+        <h3>The Contrarian Take</h3>
+        <div class="format-best">Optimized for → <span>Comment depth</span></div>
+        <p>State a position most people assume is wrong. Support it with evidence. The comments will disagree — which is exactly what you want. Multi-reply comment threads are a Depth Score multiplier.</p>
+        <div class="format-structure">
+<span class="highlight">[Claim most people assume is wrong]</span>
+[Evidence 1]
+[Evidence 2]
+[Acknowledge the strongest counterargument]
+<span class="highlight">[Restate your position with nuance]</span></div>
+      </div>
+
+      <!-- FORMAT 4 -->
+      <div class="format-card">
+        <div class="format-num">04</div>
+        <h3>The Numbered List</h3>
+        <div class="format-best">Optimized for → <span>Saves + Shares</span></div>
+        <p>A specific list of tactics or tools creates save-impulse. Key: make the number feel specific (not "tips" — "7 tactics"), and lead with the most surprising item. Lists are scannable, which actually increases dwell time on long posts.</p>
+      </div>
+
+      <!-- FORMAT 5 -->
+      <div class="format-card">
+        <div class="format-num">05</div>
+        <h3>The Long Post</h3>
+        <div class="format-best">Optimized for → <span>Maximum Depth Score</span></div>
+        <p>600–1,200 word posts consistently outperform shorter posts on Depth Score. The rule: every paragraph earns its place. Zero fluff. People who finish a long post are highly engaged — and the algorithm notices.</p>
+      </div>
+
+      <!-- FORMAT 6 -->
+      <div class="format-card">
+        <div class="format-num">06</div>
+        <h3>The No-Link Post</h3>
+        <div class="format-best">Optimized for → <span>Not getting penalized</span></div>
+        <p>External links now cut your reach by 60%. Post your insight natively. If you have a resource to share, put the link in the first comment — never in the post body. This alone will save most people's reach.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INLINE CTA 1 -->
+<div class="container">
+  <div class="inline-cta">
+    <p>This works for individual creators. But what if <strong>your whole team</strong> posted like this — every week, automatically tracked, with built-in competition?</p>
+    <a href="https://calendar.app.google/SDA5TMRMbqbPQWEn7" class="btn btn-primary" target="_blank">See How RallyUp Works →</a>
+  </div>
+</div>
+
+<!-- TEMPLATES -->
+<section>
+  <div class="container">
+    <div class="section-label">Copy & Paste</div>
+    <h2>3 templates you can use this week</h2>
+    <p style="color:var(--text2);margin-bottom:2rem">Swap the <span style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.85rem">[variables]</span> for your own details. Post as-is.</p>
+
+    <!-- TEMPLATE 1 -->
+    <div class="template-block">
+      <div class="template-header">
+        <h3>The Depth Score Opener</h3>
+        <span class="template-tag">Best for: Dwell</span>
+      </div>
+      <div class="template-body"><span class="var">[your niche]</span> just changed. most people don't know yet.
+
+<span class="var">[describe the old way everyone was doing it — 2 lines]</span>
+
+<span class="var">[what actually changed — be specific]</span>
+
+here's what that means:
+
+<span class="arrow">→</span> <span class="var">[result 1 with a number]</span>
+<span class="arrow">→</span> <span class="var">[result 2 with a number]</span>
+<span class="arrow">→</span> <span class="var">[result 3 with a number]</span>
+
+<span class="var">[1-line reflection or open question]</span></div>
+    </div>
+
+    <!-- TEMPLATE 2 -->
+    <div class="template-block">
+      <div class="template-header">
+        <h3>The Contrarian Take</h3>
+        <span class="template-tag">Best for: Comments</span>
+      </div>
+      <div class="template-body"><span class="var">[conventional wisdom people assume is true]</span>
+
+i used to believe this too.
+
+then <span class="var">[specific event that changed your mind]</span>.
+
+<span class="var">[evidence 1]</span>. <span class="var">[evidence 2]</span>.
+
+the uncomfortable truth: <span class="var">[your reframe]</span>.
+
+what do you think — am i wrong?</div>
+    </div>
+
+    <!-- TEMPLATE 3 - BLURRED TEASER -->
+    <div class="teaser-overlay">
+      <div class="teaser-content">i made a [resource type] on [topic].
+dropping it here for free.
+
+[2 lines on why you made it — the problem it solves]
+
+what's inside:
+
+1. [item 1]
+2. [item 2]
+3. [item 3]
+4. [item 4]
+5. [item 5]
+
+comment '[KEYWORD]' below — i'll dm it to you</div>
+      <div class="teaser-lock">
+        <p><strong style="color:var(--text)">The Resource Drop Template</strong></p>
+        <p>This is the highest-converting LinkedIn template we've seen. We walk through it live in the demo.</p>
+        <a href="https://calendar.app.google/SDA5TMRMbqbPQWEn7" class="btn btn-primary" target="_blank" style="font-size:.85rem;padding:.65rem 1.4rem">Unlock in Demo →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- POSTING SCHEDULE -->
+<section>
+  <div class="container">
+    <div class="section-label">Timing</div>
+    <h2>The posting schedule that works now</h2>
+
+    <div class="schedule-grid">
+      <div class="schedule-card">
+        <div class="label">Best days</div>
+        <div class="value">Tue · Wed · Thu</div>
+        <div class="sub">4–6 AM EST</div>
+      </div>
+      <div class="schedule-card">
+        <div class="label">Frequency</div>
+        <div class="value">3–4× per week</div>
+        <div class="sub">Quality dwell > quantity</div>
+      </div>
+      <div class="schedule-card">
+        <div class="label">Avoid</div>
+        <div class="value" style="color:var(--red)">Mon AM · Fri PM · Weekends</div>
+        <div class="sub">Low dwell windows</div>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem">
+      <h3 style="margin-bottom:1rem">The first 30 minutes matter most</h3>
+      <div class="rule-row">
+        <div class="rule-icon do">✓</div>
+        <div class="rule-text"><strong>Reply to every comment</strong> in the first 30 min — especially multi-sentence comments. Back-and-forth threads are the strongest Depth Score signal after dwell time.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon do">✓</div>
+        <div class="rule-text"><strong>Drop your link in the first comment</strong> — never in the post body. This single change can recover up to 60% of lost reach.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon dont">✗</div>
+        <div class="rule-text"><strong>Don't post and ghost.</strong> LinkedIn's algorithm watches engagement velocity. If you don't respond, it stops distributing.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon dont">✗</div>
+        <div class="rule-text"><strong>Don't post 7 days a week.</strong> Diminishing returns kick in hard after 4 posts. Your audience gets fatigued and dwell time drops on every post.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SCALE SECTION - BRIDGE TO CTA -->
+<section>
+  <div class="container">
+    <div class="section-label">The Scale Problem</div>
+    <h2>This works for one person.<br>What about your whole team?</h2>
+    <p style="color:var(--text2);max-width:560px;margin-bottom:2rem">The new algorithm rewards volume and authenticity — from multiple voices, not just one brand page. Companies winning on LinkedIn right now have 10, 20, 50 employees posting consistently with high Depth Scores.</p>
+    <p style="color:var(--text2);max-width:560px;margin-bottom:1rem">But getting a team to post is a coordination nightmare:</p>
+
+    <div style="margin-bottom:2rem">
+      <div class="rule-row">
+        <div class="rule-icon dont">?</div>
+        <div class="rule-text">How do you <strong>know who's posting</strong> — and what's actually performing?</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon dont">?</div>
+        <div class="rule-text">How do you <strong>motivate people</strong> who "don't know what to say"?</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon dont">?</div>
+        <div class="rule-text">How do you <strong>track engagement</strong> without manually checking 30 profiles?</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-icon dont">?</div>
+        <div class="rule-text">How do you make it <strong>stick</strong> past week one?</div>
+      </div>
+    </div>
+
+    <p style="color:var(--text2);max-width:560px">That's what <a href="https://rallyup.team" target="_blank" style="font-weight:700">RallyUp</a> does. It gamifies employee LinkedIn posting with points, leaderboards, and automated tracking — so your team actually wants to post, and you can see exactly what's working.</p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section">
+  <div class="cta-box">
+    <div class="badge" style="margin-bottom:1.5rem">🚀 15-minute demo</div>
+    <h2>Ready to turn your team<br>into a LinkedIn engine?</h2>
+    <p>Book a 15-min call with Alec. He'll show you how RallyUp works, walk through the Resource Drop template live, and map it to your team — no pitch deck, no pressure.</p>
+    <a href="https://calendar.app.google/SDA5TMRMbqbPQWEn7" class="btn btn-primary" target="_blank">Book a Demo →</a>
+    <br>
+    <a href="https://rallyup.team" class="btn btn-ghost" target="_blank">Learn more about RallyUp</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Made by <a href="https://rallyup.team" target="_blank">RallyUp</a> — turn your employees into your best marketing channel.</p>
+  <p style="margin-top:.5rem">© 2026 RallyUp. All rights reserved.</p>
+</footer>
+
+<!-- FLOATING CTA -->
+<div class="floating-cta" id="floatingCta">
+  <a href="https://calendar.app.google/SDA5TMRMbqbPQWEn7" class="btn btn-primary" target="_blank">Book a Demo →</a>
+</div>
+
+<script>
+// Floating CTA visibility
+const cta = document.getElementById('floatingCta');
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      cta.classList.toggle('visible', window.scrollY > window.innerHeight * 0.5);
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
+</script>
+
+</body>
+</html>
